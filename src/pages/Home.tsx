@@ -2,6 +2,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import PokemonCard from "../components/PokemonCard";
+import PokemonCardSkeleton from "../components/PokemonCardSkeleton";
 import Pagination from "../components/Pagination";
 import TypeFilter from "../components/TypeFilter";
 import { api } from "../lib/api";
@@ -125,7 +126,11 @@ export default function Home() {
       <TypeFilter selectedTypes={selectedTypes} onTypeSelect={handleTypeSelect} />
 
       {loading ? (
-        <p className="text-center">Carregando Pokémon...</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          {Array.from({ length: limit }).map((_, index) => (
+            <PokemonCardSkeleton key={index} />
+          ))}
+        </div>
       ) : (
         <>
           <div className="min-h-[50vh]">

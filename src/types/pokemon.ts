@@ -12,6 +12,12 @@ export interface PokemonListResponse {
 }
 
 // --- Tipos para os Detalhes do Pokémon ---
+
+export interface PokemonDetailData {
+  id: number; // Adicione esta linha
+  name: string;
+}
+
 export interface PokemonType {
   type: {
     name: string;
@@ -27,6 +33,7 @@ export interface PokemonStat {
 
 export interface PokemonSprites {
   front_default: string;
+  front_shiny: string;
 }
 
 export interface PokemonDetailData {
@@ -42,10 +49,22 @@ export interface PokemonDetailData {
 }
 
 // --- Tipos para a Cadeia de Evolução ---
+
+export interface FlavorTextEntry {
+    flavor_text: string;
+    language: {
+        name: string;
+    };
+    version: {
+        name: string;
+    };
+}
+
 export interface PokemonSpecies {
     evolution_chain: {
         url: string;
     };
+    flavor_text_entries: FlavorTextEntry[]; 
 }
 
 export interface EvolutionNode {

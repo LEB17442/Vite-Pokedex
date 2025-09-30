@@ -1,43 +1,41 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { usePokemonApi } from "../hooks/usePokemonApi";
-import { api } from "../lib/api";
+import type { PokemonDetailData } from "../types/pokemon";
+import PokemonCardSkeleton from "./PokemonCardSkeleton";
+import { typeColorMap } from "./TypeBadge";
 
 interface PokemonCardProps {
   name: string;
 }
 
-interface PokemonDetails {
-  sprites: {
-    front_default: string;
-  };
-}
-
 export default function PokemonCard({ name }: PokemonCardProps) {
-  const [imageUrl, setImageUrl,] = useState<string | null>(null);
-  const { data: pokemonDetails, loading } = usePokemonApi<PokemonDetails>(`pokemon/${name}`);
+  const { data: pokemon, isPending } = usePokemonApi<PokemonDetailData>(`pokemon/${name}`);
 
+  // Se estiver carregando, mostre o Skeleton
+  if (isPending || !pokemon) {
+    return <PokemonCardSkeleton />;
+  }
 
-  useEffect(() => {
-    async function fetchPokemonImage() {
-      try {
-        const response = await api.get<PokemonDetails>(`pokemon/${name}`);
-        setImageUrl(response.data.sprites.front_default);
-      } catch (error) {
-        console.error(`Failed to fetch image for ${name}:`, error);
-      }
-    }
-    fetchPokemonImage();
-  }, [name]);
+  // Pega a cor do primeiro tipo do Pokémon
+  const primaryType = pokemon.types[0].type.name;
+  const colors = typeColorMap[primaryType] || typeColorMap.normal;
 
   return (
-    <Link to={`/pokemon/${name}`} className="p-4 border rounded-lg shadow-md hover:shadow-lg transition-shadow flex flex-col items-center">
-      {loading || !pokemonDetails ? (
-        <div className="w-24 h-24 bg-gray-200 rounded animate-pulse" />
-      ) : (
-        <img src={pokemonDetails.sprites.front_default} alt={name} className="w-24 h-24" />
-      )}
-      <p className="capitalize mt-2 font-semibold">{name}</p>
+    <Link 
+    to={`/pokemon/${name}`} 
+    className={`group relative p-4 rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-all flex flex-col items-center text-center ${colors.bg}`}
+    >
+      <div className="bg-white/50 rounded-full p-2 mb-2">
+        <img 
+          src={pokemon.sprites.front_default} 
+          alt={pokemon.name} 
+          className="w-24 h-24" 
+        />
+      </div>
+      <div className="mt-auto">
+        <p className={`text-xs font-bold ${colors.text} opacity-60`}>Nº{pokemon.id.toString().padStart(4, '0')}</p>
+        <p className={`capitalize font-semibold ${colors.text}`}>{pokemon.name}</p>
+      </div>
     </Link>
   );
 }

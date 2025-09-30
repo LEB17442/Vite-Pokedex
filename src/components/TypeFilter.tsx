@@ -8,13 +8,13 @@ interface TypeFilterProps {
 }
 
 export default function TypeFilter({ selectedTypes, onTypeSelect }: TypeFilterProps) {
-  const { data: typesData, loading } = usePokemonApi<TypeListResponse>("type");
+  const { data: typesData, isPending } = usePokemonApi<TypeListResponse>("type");
 
   const handleSelect = (typeName: string) => {
     onTypeSelect(typeName);
   };
 
-  if (loading) return <p className="text-center">Carregando filtros...</p>;
+  if (isPending) return <p className="text-center">Carregando filtros...</p>;
 
   return (
     <div className="mb-8 p-4 bg-gray-100 rounded-lg">
