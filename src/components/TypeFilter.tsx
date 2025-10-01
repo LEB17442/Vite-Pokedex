@@ -14,16 +14,17 @@ export default function TypeFilter({ selectedTypes, onTypeSelect }: TypeFilterPr
     onTypeSelect(typeName);
   };
 
-  if (isPending) return <p className="text-center">Carregando filtros...</p>;
+  if (isPending) return <p className="text-center text-gray-400">Carregando filtros...</p>;
 
   return (
-    <div className="mb-8 p-4 bg-gray-100 rounded-lg">
+    // Aplicando nosso estilo de painel!
+    <div className="panel p-4 mb-8">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold text-center flex-grow">Filtrar por Tipo (até 2)</h2>
+        <h2 className="text-xl font-bold text-white flex-grow text-center">Filtrar por Tipo (até 2)</h2>
         {selectedTypes.length > 0 && (
           <button 
             onClick={() => onTypeSelect('clear')} 
-            className="text-sm text-blue-600 hover:underline"
+            className="text-sm text-blue-400 hover:underline"
           >
             Limpar Filtro
           </button>
@@ -35,12 +36,12 @@ export default function TypeFilter({ selectedTypes, onTypeSelect }: TypeFilterPr
             <button
               key={type.name}
               onClick={() => handleSelect(type.name)}
-              // Desabilita o botão se não estiver selecionado e já houver 2 tipos escolhidos
               disabled={!selectedTypes.includes(type.name) && selectedTypes.length >= 2}
-              className={`transition-transform duration-200 disabled:opacity-25 disabled:cursor-not-allowed ${
-                selectedTypes.length > 0 && !selectedTypes.includes(type.name) 
-                ? 'opacity-50 scale-95' 
-                : 'opacity-100'
+              // Estilos ajustados para o tema escuro
+              className={`transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed ${
+                selectedTypes.includes(type.name)
+                ? 'scale-105 opacity-100'
+                : 'scale-100 opacity-60 hover:opacity-100'
               }`}
             >
               <TypeBadge typeName={type.name} />

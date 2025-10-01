@@ -34,9 +34,28 @@ export interface PokemonStat {
 export interface PokemonSprites {
   front_default: string;
   front_shiny: string;
+  back_shiny: string;
+// Adicione a estrutura completa abaixo
+  other?: {
+    'official-artwork': {
+      front_default: string;
+      front_shiny: string;
+    };
+  };
+  versions?: {
+    'generation-v': {
+      'black-white': {
+        animated?: {
+          front_default: string;
+          front_shiny: string;
+        };
+      };
+    };
+  };
 }
 
 export interface PokemonDetailData {
+  id: number;
   name: string;
   sprites: PokemonSprites;
   types: PokemonType[];
@@ -64,7 +83,14 @@ export interface PokemonSpecies {
     evolution_chain: {
         url: string;
     };
-    flavor_text_entries: FlavorTextEntry[]; 
+    flavor_text_entries: FlavorTextEntry[];
+    varieties: {
+      is_default: boolean;
+      pokemon: {
+        name: string;
+        url: string;
+      }
+    }[];
 }
 
 export interface EvolutionNode {
@@ -96,4 +122,24 @@ export interface PokemonSlot {
 
 export interface TypeDetailResponse {
     pokemon: PokemonSlot[];
+}
+
+export interface EvolutionDetail {
+  item: { name: string; url: string } | null;
+  trigger: { name: string; url: string };
+  min_level: number | null;
+  min_happiness: number | null;
+  held_item: { name: string; url: string } | null;
+  known_move: { name: string; url: string } | null;
+  time_of_day: 'day' | 'night' | '';
+  location: { name: string; url: string } | null;
+}
+
+
+export interface EvolutionNode {
+    species: {
+        name: string;
+    };
+    evolves_to: EvolutionNode[];
+    evolution_details: EvolutionDetail[];
 }
